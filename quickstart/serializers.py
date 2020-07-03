@@ -6,7 +6,7 @@ from quickstart.models import Snippet, Comment
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
-    comments = serializers.HyperlinkedRelatedField(many=True, view_name='comment-detail', read_only=True)
+    comments = serializers.SlugRelatedField(slug_field='text', many=True, read_only=True)
 
     class Meta:
         model = Snippet
@@ -19,10 +19,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'snippets']
+        fields = ['url', 'id', 'username', 'snippets', 'comments']
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
         model = Comment
-        fields = ['url', 'id', 'snippet', 'text']
+        fields = ['url', 'id', 'snippet', 'text', 'owner']
