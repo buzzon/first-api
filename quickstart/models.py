@@ -33,7 +33,7 @@ class Snippet(models.Model):
 
 
 class Comment(models.Model):
-    snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE)
+    snippet = models.ForeignKey(Snippet, related_name='comments', on_delete=models.CASCADE)
     owner = models.ForeignKey('auth.User', related_name='comments', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     text = models.TextField()

@@ -16,7 +16,7 @@ def api_root(request, format=None):
     return Response({
         'users': reverse('user-list', request=request, format=format),
         'snippets': reverse('snippet-list', request=request, format=format),
-        'comments': reverse('comment-lst', request=request, format=format),
+        'comments': reverse('comment-list', request=request, format=format),
     })
 
 
@@ -24,6 +24,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class SnippetViewSet(viewsets.ModelViewSet):
