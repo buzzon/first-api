@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from quickstart.models import Snippet
+from quickstart.models import Snippet, Comment
 
 
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,3 +19,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['url', 'id', 'username', 'snippets']
+
+
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['url', 'id', 'text']

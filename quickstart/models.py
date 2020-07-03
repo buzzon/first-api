@@ -30,3 +30,11 @@ class Snippet(models.Model):
         formatter = HtmlFormatter(style=self.style, linenos=linenos, full=True, **options)
         self.highlighted = highlight(self.code, lexer, formatter)
         super(Snippet, self).save(*args, **kwargs)
+
+
+class Comment(models.Model):
+    snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE)
+    owner = models.ForeignKey('auth.User', related_name='comments', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+

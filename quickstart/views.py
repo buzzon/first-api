@@ -1,6 +1,6 @@
-from quickstart.models import Snippet
+from quickstart.models import Snippet, Comment
 from quickstart.permissions import IsOwnerOrReadOnly
-from quickstart.serializers import SnippetSerializer, UserSerializer
+from quickstart.serializers import SnippetSerializer, UserSerializer, CommentSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework.decorators import api_view
@@ -15,8 +15,15 @@ from rest_framework.decorators import action
 def api_root(request, format=None):
     return Response({
         'users': reverse('user-list', request=request, format=format),
-        'snippets': reverse('snippet-list', request=request, format=format)
+        'snippets': reverse('snippet-list', request=request, format=format),
+        'comments': reverse('comment-lst', request=request, format=format),
     })
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 
 class SnippetViewSet(viewsets.ModelViewSet):
